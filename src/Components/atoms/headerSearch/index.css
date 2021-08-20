@@ -1,0 +1,30 @@
+.header__search {
+  position: relative;
+}
+.search__input {
+  margin-right: 20px;
+  padding-left: 40px;
+  width: 150px;
+  height: 32px;
+  border-radius: 7px;
+  outline: none;
+  border: none;
+}
+
+.search__input::placeholder {
+  font: normal normal 12px/1.41 "Alata", sans-serif;
+  color: #979797;
+}
+
+.search__icon {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.search__icon > img {
+  width: 15px;
+}

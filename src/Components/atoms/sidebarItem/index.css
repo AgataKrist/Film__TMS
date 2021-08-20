@@ -1,0 +1,14 @@
+.icon__item path {
+  transition: fill 0.2s linear;
+}
+.icon__item:hover path {
+  fill: #777c85;
+}
+.icon__item:hover rect {
+  fill: #eb2a2a;
+  stroke: #f8ecec;
+}
+.link__itemSidebar-dark {
+  position: absolute;
+  bottom: 10px;
+}

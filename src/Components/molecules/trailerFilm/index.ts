@@ -1,0 +1,1 @@
+export { TrailerFilm } from "./TrailerFilm";

@@ -1,0 +1,14 @@
+.trailer__wrapper {
+  margin: auto;
+  margin-bottom: 100px;
+  max-width: 800px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+  box-sizing: border-box;
+  border-radius: 13px;
+}
+
+.trailer__content {
+  padding: 30px;
+  padding-bottom: 120px;
+}

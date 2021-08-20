@@ -1,0 +1,1 @@
+export { DescriptionTrailer } from "./DescriptionTrailer";

@@ -1,0 +1,14 @@
+.aboutFilm__text {
+  font: normal normal 20px/1.4 "Alata", sans-serif;
+  color: #979797;
+}
+
+.aboutFilmShort__text {
+  font: normal normal 20px/1.4 "Alata", sans-serif;
+  color: #979797;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  height: 3.9em;
+}

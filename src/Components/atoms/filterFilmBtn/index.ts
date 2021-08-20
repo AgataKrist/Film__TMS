@@ -1,0 +1,1 @@
+export { FilterFilm } from "./FilterFilm";

@@ -1,0 +1,10 @@
+.header__sign {
+  display: flex;
+  align-items: center;
+}
+
+.sign__name {
+  margin-right: 30px;
+  font: normal normal 20px/1.375 "Alata", sans-serif;
+  color: #4f4f4f;
+}

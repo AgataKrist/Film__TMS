@@ -1,0 +1,20 @@
+.wrapper__sidebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100vh;
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.sidebar__content {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.link__itemSidebar {
+  margin-bottom: 30px;
+}
