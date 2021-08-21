@@ -9,10 +9,11 @@ import { FieldFromTo } from "../../atoms/fieldFromTo";
 import { FieldGenre } from "../../atoms/fieldGenre";
 
 interface IFilter {
-  values: string[];
+  countries: string[];
+  genres: string[];
 }
 
-export const Filter = memo(({ values }: IFilter) => {
+export const Filter = memo(({ genres, countries }: IFilter) => {
   return (
     <div className={"filterBOX__wrapper"}>
       <div className="filterBOX__content">
@@ -27,10 +28,10 @@ export const Filter = memo(({ values }: IFilter) => {
           <Title title={"Filter:"} />
           <form className={"form__filter"} action="/">
             <FieldSearch />
-            <FieldSelect values={values} />
+            <FieldSelect values={countries} />
             <FieldFromTo title={"Years"} />
             <FieldFromTo title={"Rating"} />
-            <FieldGenre />
+            <FieldGenre values={genres} />
           </form>
         </div>
         <BtnFilter text={"Show results"} isActive={true} />

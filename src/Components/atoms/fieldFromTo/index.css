@@ -1,0 +1,22 @@
+.from_to {
+  grid-column: 2/2;
+  grid-row: 1/1;
+}
+form > label:nth-child(4) {
+  grid-row: 2/2;
+}
+
+.from,
+.to {
+  margin-right: 10px;
+  font: normal normal 16px/1.375 "Alata", sans-serif;
+  color: #7f7fd5;
+}
+.from span,
+.to span {
+  margin-right: 10px;
+}
+.from > input,
+.to > input {
+  width: 83px;
+}

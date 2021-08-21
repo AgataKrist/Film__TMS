@@ -1,13 +1,24 @@
 import { memo } from "react";
 import "./index.css";
 
-export const FieldGenre = memo(() => {
+interface IFieldGenre {
+  values: string[];
+}
+
+export const FieldGenre = memo(({ values }: IFieldGenre) => {
   return (
     <label className={"label label__genre"}>
       <div className={"field__title"}>Genres</div>
       <div className="genres__wrapper">
         <div className="tags"></div>
-        <button className="add">add</button>
+        <span className={"add"}>add</span>
+        <select className={"select"} value={""}>
+          <option></option>
+          {values.map((value) => {
+            return <option value={`${value}`}>{value}</option>;
+          })}
+        </select>
+        {/* <button className="add">add</button> */}
       </div>
     </label>
   );
