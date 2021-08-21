@@ -6,8 +6,14 @@ import { ShortCardFilm } from "./Components/molecules/shortCardFilm";
 import { Sidebar } from "./Components/molecules/sidebar";
 import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
+import { IFilm } from "./types";
 
 function App() {
+  const countries = Array.from(
+    new Set(films.map((film) => film.country.split(", ")).flat())
+  );
+  console.log(countries);
+
   const selectedFilm = films[1];
   const trailerCurrent = trailer[0];
   return (
@@ -16,7 +22,7 @@ function App() {
       <div className="main">
         <Header />
         <CardFilm film={selectedFilm} />
-        <Filter />
+        <Filter values={countries} />
         <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
         <div className="allFilms__wrapper">
           {films.map((film) => {

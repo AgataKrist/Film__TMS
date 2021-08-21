@@ -16,7 +16,7 @@ export const TrailerFilm = memo(
     return (
       <div className={"trailer__wrapper"}>
         <div className="trailer__content">
-          <Title title={title} isShort={false} />
+          <Title title={"Trailer: " + title} isShort={false} />
           <VideoTrailer video={trailer} />
           <DescriptionTrailer description={description} />
         </div>

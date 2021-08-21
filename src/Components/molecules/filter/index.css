@@ -21,3 +21,89 @@
 .sort {
   margin-bottom: 40px;
 }
+.form__filter {
+  margin-top: -20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.from_to {
+  grid-column: 2/2;
+  grid-row: 1/1;
+}
+form > label:nth-child(4) {
+  grid-row: 2/2;
+}
+.label__genre {
+  grid-column: 2/2;
+  grid-row: 3/3;
+  justify-self: flex-start;
+}
+
+.label__countries {
+  grid-column: 1/2;
+}
+.form__filter > label {
+  margin-bottom: 15px;
+}
+.form__filter input {
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+.form__filter select {
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+
+.form__filter > label > input,
+select {
+  display: block;
+  width: 150px;
+}
+.from,
+.to {
+  margin-right: 10px;
+  font: normal normal 16px/1.375 "Alata", sans-serif;
+  color: #7f7fd5;
+}
+.from span,
+.to span {
+  margin-right: 10px;
+}
+.form__filter > label > select {
+  padding: 2px;
+}
+.from > input {
+  margin-right: 40px;
+}
+
+.from > input,
+.to > input {
+  width: 83px;
+}
+
+.field__title {
+  margin-bottom: 10px;
+  font: normal normal 18px/1.375 "Alata", sans-serif;
+  color: #979797;
+}
+
+.genres__wrapper {
+  display: flex;
+  min-width: 300px;
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+.tags {
+  flex: 1;
+}
+.add {
+  border: none;
+  color: #7f7fd5;
+  font: normal normal 16px/1.375 "Alata", sans-serif;
+  background: transparent;
+  cursor: pointer;
+}

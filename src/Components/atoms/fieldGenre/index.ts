@@ -1,0 +1,1 @@
+export { FieldGenre } from "./FieldGenre";

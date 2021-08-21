@@ -1,4 +1,5 @@
-export const films = [
+import { IFilm } from "./../types/index";
+export const films: IFilm[] = [
   {
     id: 1,
     title: "Black Widow",

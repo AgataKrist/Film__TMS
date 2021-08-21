@@ -3,9 +3,16 @@ import { memo } from "react";
 import { BtnFilter } from "../../atoms/filterCardBtn";
 import { Title } from "../../atoms/title";
 import "./index.css";
-import { FormFilter } from "./../../atoms/formFilter/FormFilter";
+import { FieldSelect } from "../../atoms/fieldSelect";
+import { FieldSearch } from "../../atoms/fieldSearch";
+import { FieldFromTo } from "../../atoms/fieldFromTo";
+import { FieldGenre } from "../../atoms/fieldGenre";
 
-export const Filter = memo(() => {
+interface IFilter {
+  values: string[];
+}
+
+export const Filter = memo(({ values }: IFilter) => {
   return (
     <div className={"filterBOX__wrapper"}>
       <div className="filterBOX__content">
@@ -18,7 +25,13 @@ export const Filter = memo(() => {
         </div>
         <div className="filter">
           <Title title={"Filter:"} />
-          <FormFilter />
+          <form className={"form__filter"} action="/">
+            <FieldSearch />
+            <FieldSelect values={values} />
+            <FieldFromTo title={"Years"} />
+            <FieldFromTo title={"Rating"} />
+            <FieldGenre />
+          </form>
         </div>
         <BtnFilter text={"Show results"} isActive={true} />
       </div>
