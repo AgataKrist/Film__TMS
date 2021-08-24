@@ -4,6 +4,7 @@ import { Filter } from "./Components/molecules/filter";
 import { Header } from "./Components/molecules/header";
 import { ShortCardFilm } from "./Components/molecules/shortCardFilm";
 import { Sidebar } from "./Components/molecules/sidebar";
+import { StarRating } from "./Components/molecules/starRating";
 import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 
@@ -24,6 +25,7 @@ function App() {
       <div className="main">
         <Header />
         <CardFilm film={selectedFilm} />
+        <StarRating />
         <Filter {...values} />
         <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
         <div className="allFilms__wrapper">
