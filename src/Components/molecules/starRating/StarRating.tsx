@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { memo } from "react";
 import "./index.css";
-import { FaStar } from "react-icons/fa";
 import { BtnFilter } from "../../atoms/filterCardBtn";
 import { IoMdStar } from "react-icons/io";
-
-// interface IStarRating {
-//   rating: any;
-//   setRating: any;
-// }
 
 export const StarRating = memo(() => {
   const [rating, setRating] = useState(0);
@@ -20,9 +14,15 @@ export const StarRating = memo(() => {
           {[...Array(10)].map((star, i) => {
             const ratingValue = i + 1;
             return (
-              <label>
-                <input type="radio" name="rating" value={ratingValue} />
+              <label key={i + 1}>
+                <input
+                  key={i + 2}
+                  type="radio"
+                  name="rating"
+                  value={ratingValue}
+                />
                 <IoMdStar
+                  key={i + 3}
                   onClick={() => setRating(ratingValue)}
                   className={"star"}
                   color={

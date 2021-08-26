@@ -14,11 +14,14 @@ export const FieldGenre = memo(({ values }: IFieldGenre) => {
         <span className={"add"}>add</span>
         <select className={"select"} value={""}>
           <option></option>
-          {values.map((value) => {
-            return <option value={`${value}`}>{value}</option>;
+          {values.map((value, i) => {
+            return (
+              <option key={i} value={`${value}`}>
+                {value}
+              </option>
+            );
           })}
         </select>
-        {/* <button className="add">add</button> */}
       </div>
     </label>
   );

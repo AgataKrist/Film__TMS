@@ -10,8 +10,8 @@ export const FieldSelect = memo(({ values }: IFieldSelect) => {
     <label className={"label label__countries"}>
       <div className={"field__title"}>Countries</div>
       <select>
-        {values.map((value) => {
-          return <option value={`${value}`}>{`${value}`}</option>;
+        {values.map((value, i) => {
+          return <option key={i} value={`${value}`}>{`${value}`}</option>;
         })}
       </select>
     </label>

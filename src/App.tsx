@@ -7,6 +7,7 @@ import { Sidebar } from "./Components/molecules/sidebar";
 import { StarRating } from "./Components/molecules/starRating";
 import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
+import { useState } from "react";
 
 function App() {
   const countries = Array.from(
@@ -19,20 +20,51 @@ function App() {
   };
   const selectedFilm = films[1];
   const trailerCurrent = trailer[0];
+
+  const [filterdFilms, setFilterdFilms] = useState(films);
+  const [inputValue, setInputValue] = useState("");
+  const [isClikedfilterBtn, setisClikedfilterBtn] = useState(false);
+
+  const onClickSearchBtn = () => {
+    const filterByTitile = films.filter((film) =>
+      film.title.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setFilterdFilms(filterByTitile);
+  };
+  const onChangeHandler = (text: string) => {
+    setInputValue(text);
+    if (text.length > 2) {
+      const filterByTitile = films.filter((film) =>
+        film.title.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setFilterdFilms(filterByTitile);
+      return;
+    }
+    setFilterdFilms(films);
+  };
+  const onClickFilterBtn = () => {
+    setisClikedfilterBtn(!isClikedfilterBtn);
+  };
+
   return (
     <div className="App">
       <Sidebar />
       <div className="main">
-        <Header />
-        <CardFilm film={selectedFilm} />
-        <StarRating />
-        <Filter {...values} />
-        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
+        <Header
+          value={inputValue}
+          onClickSearchBtn={onClickSearchBtn}
+          onChangeHandler={onChangeHandler}
+          onClickFilterBtn={onClickFilterBtn}
+        />
+        {isClikedfilterBtn ? <Filter {...values} /> : null}
         <div className="allFilms__wrapper">
-          {films.map((film) => {
+          {filterdFilms.map((film) => {
             return <ShortCardFilm key={film.id} {...film} />;
           })}
         </div>
+        <CardFilm film={selectedFilm} />
+        <StarRating />
+        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
       </div>
     </div>
   );
