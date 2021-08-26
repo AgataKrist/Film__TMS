@@ -25,7 +25,6 @@ function App() {
   const [filterdFilms, setFilterdFilms] = useState(films.slice(0, 1));
   const [inputValue, setInputValue] = useState("");
   const [isClikedfilterBtn, setisClikedfilterBtn] = useState(false);
-  const [isBtnVisible, setIsBtnVisible] = useState(true);
 
   const onClickSearchBtn = () => {
     const filterByTitile = films.filter((film) =>
@@ -51,7 +50,6 @@ function App() {
   const onClickNextFilm = () => {
     if (filterdFilms.length + 1 >= films.length) {
       setFilterdFilms(films.slice(0, filterdFilms.length + 1));
-      setIsBtnVisible(false);
     }
     setFilterdFilms(films.slice(0, filterdFilms.length + 1));
   };
@@ -69,12 +67,13 @@ function App() {
         {isClikedfilterBtn ? <Filter {...values} /> : null}
         <div className="allFilms__wrapper">
           <div className="btn">
-            <BtnFilter
-              text={"Show Next"}
-              isActive={true}
-              onClickNextFilm={onClickNextFilm}
-              isBtnVisible={isBtnVisible}
-            />
+            {filterdFilms.length !== films.length && (
+              <BtnFilter
+                text={"Show Next"}
+                isActive={true}
+                onClickNextFilm={onClickNextFilm}
+              />
+            )}
           </div>
           <div className="allFilms">
             {filterdFilms.map((film) => {
