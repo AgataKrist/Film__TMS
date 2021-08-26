@@ -8,14 +8,14 @@ import { StarRating } from "./Components/molecules/starRating";
 import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
-import { BtnFilter } from "./Components/atoms/filterCardBtn/BtnFilter";
+import { Button } from "./Components/atoms/button/Button";
 
 function App() {
   const countries = Array.from(
     new Set(films.map((film) => film.country.split(", ")).flat())
   );
   const genres = Array.from(new Set(films.map((film) => film.genre).flat()));
-  const values = {
+  const filterProps = {
     countries, //array
     genres, //array
   };
@@ -25,6 +25,8 @@ function App() {
   const [filterdFilms, setFilterdFilms] = useState(films.slice(0, 1));
   const [inputValue, setInputValue] = useState("");
   const [isClikedfilterBtn, setisClikedfilterBtn] = useState(false);
+  const [isFilterByRatingCheck, setisFilterByRatingCheck] = useState(false);
+  const [isFilterByYearCheck, setisFilterByYearCheck] = useState(false);
 
   const onClickSearchBtn = () => {
     const filterByTitile = films.filter((film) =>
@@ -48,10 +50,37 @@ function App() {
   };
 
   const onClickNextFilm = () => {
-    if (filterdFilms.length + 1 >= films.length) {
-      setFilterdFilms(films.slice(0, filterdFilms.length + 1));
+    if (isFilterByRatingCheck) {
+      setFilterdFilms(
+        [...films]
+          .sort((a, b) => a.imdbRating - b.imdbRating)
+          .slice(0, filterdFilms.length + 1)
+      );
+      return;
+    }
+    if (isFilterByYearCheck) {
+      setFilterdFilms(
+        [...films]
+          .sort((a, b) => a.year - b.year)
+          .slice(0, filterdFilms.length + 1)
+      );
+      return;
     }
     setFilterdFilms(films.slice(0, filterdFilms.length + 1));
+  };
+  const onClickFilterByRating = () => {
+    setisFilterByYearCheck(false);
+    setisFilterByRatingCheck(!isFilterByRatingCheck);
+    setFilterdFilms(
+      [...films].sort((a, b) => a.imdbRating - b.imdbRating).slice(0, 1)
+    );
+    setisClikedfilterBtn(false);
+  };
+  const onClickFilterByYear = () => {
+    setisFilterByRatingCheck(false);
+    setisFilterByYearCheck(!isFilterByYearCheck);
+    setFilterdFilms([...films].sort((a, b) => a.year - b.year).slice(0, 1));
+    setisClikedfilterBtn(false);
   };
 
   return (
@@ -64,11 +93,19 @@ function App() {
           onChangeHandler={onChangeHandler}
           onClickFilterBtn={onClickFilterBtn}
         />
-        {isClikedfilterBtn ? <Filter {...values} /> : null}
+        {isClikedfilterBtn ? (
+          <Filter
+            {...filterProps}
+            isFilterByRatingCheck={isFilterByRatingCheck}
+            isFilterByYearCheck={isFilterByYearCheck}
+            onClickFilterByRating={onClickFilterByRating}
+            onClickFilterByYear={onClickFilterByYear}
+          />
+        ) : null}
         <div className="allFilms__wrapper">
           <div className="btn">
             {filterdFilms.length !== films.length && (
-              <BtnFilter
+              <Button
                 text={"Show Next"}
                 isActive={true}
                 onClickNextFilm={onClickNextFilm}

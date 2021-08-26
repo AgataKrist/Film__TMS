@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { memo } from "react";
 import "./index.css";
-import { BtnFilter } from "../../atoms/filterCardBtn";
+import { Button } from "../../atoms/button";
 import { IoMdStar } from "react-icons/io";
 
 export const StarRating = memo(() => {
@@ -37,7 +37,7 @@ export const StarRating = memo(() => {
           })}
         </div>
         <div className={"btn__add"}>
-          <BtnFilter text={"Add RAting"} isActive />
+          <Button text={"Add RAting"} isActive />
         </div>
       </div>
     </div>
