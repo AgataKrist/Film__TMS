@@ -8,6 +8,7 @@ import { StarRating } from "./Components/molecules/starRating";
 import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
+import { BtnFilter } from "./Components/atoms/filterCardBtn/BtnFilter";
 
 function App() {
   const countries = Array.from(
@@ -21,9 +22,10 @@ function App() {
   const selectedFilm = films[1];
   const trailerCurrent = trailer[0];
 
-  const [filterdFilms, setFilterdFilms] = useState(films);
+  const [filterdFilms, setFilterdFilms] = useState(films.slice(0, 1));
   const [inputValue, setInputValue] = useState("");
   const [isClikedfilterBtn, setisClikedfilterBtn] = useState(false);
+  const [isBtnVisible, setIsBtnVisible] = useState(true);
 
   const onClickSearchBtn = () => {
     const filterByTitile = films.filter((film) =>
@@ -46,6 +48,14 @@ function App() {
     setisClikedfilterBtn(!isClikedfilterBtn);
   };
 
+  const onClickNextFilm = () => {
+    if (filterdFilms.length + 1 >= films.length) {
+      setFilterdFilms(films.slice(0, filterdFilms.length + 1));
+      setIsBtnVisible(false);
+    }
+    setFilterdFilms(films.slice(0, filterdFilms.length + 1));
+  };
+
   return (
     <div className="App">
       <Sidebar />
@@ -58,9 +68,19 @@ function App() {
         />
         {isClikedfilterBtn ? <Filter {...values} /> : null}
         <div className="allFilms__wrapper">
-          {filterdFilms.map((film) => {
-            return <ShortCardFilm key={film.id} {...film} />;
-          })}
+          <div className="btn">
+            <BtnFilter
+              text={"Show Next"}
+              isActive={true}
+              onClickNextFilm={onClickNextFilm}
+              isBtnVisible={isBtnVisible}
+            />
+          </div>
+          <div className="allFilms">
+            {filterdFilms.map((film) => {
+              return <ShortCardFilm key={film.id} {...film} />;
+            })}
+          </div>
         </div>
         <CardFilm film={selectedFilm} />
         <StarRating />

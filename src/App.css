@@ -92,6 +92,11 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .allFilms__wrapper {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.allFilms {
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
