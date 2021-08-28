@@ -10,11 +10,16 @@ interface IHeader {
   value: string;
   onChangeHandler: (text: string) => void;
   onClickSearchBtn: () => void;
-  onClickFilterBtn: () => void;
+  onClickShowFilter: () => void;
 }
 
 export const Header = memo(
-  ({ value, onChangeHandler, onClickSearchBtn, onClickFilterBtn }: IHeader) => {
+  ({
+    value,
+    onChangeHandler,
+    onClickSearchBtn,
+    onClickShowFilter,
+  }: IHeader) => {
     const pageTitle = "Movies";
     const name = "Anya";
     return (
@@ -26,7 +31,7 @@ export const Header = memo(
             onClick={onClickSearchBtn}
             onChangeHandler={onChangeHandler}
           />
-          <FilterFilm onClickFilterBtn={onClickFilterBtn} />
+          <FilterFilm onClickShowFilter={onClickShowFilter} />
         </div>
         <Sign name={name} />
       </div>

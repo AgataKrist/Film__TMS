@@ -3,13 +3,13 @@ import "./index.css";
 import Filter from "../../../Accets/IMG/Filter.svg";
 
 interface IFilterFilm {
-  onClickFilterBtn: () => void;
+  onClickShowFilter: () => void;
 }
 
-export const FilterFilm = memo(({ onClickFilterBtn }: IFilterFilm) => {
+export const FilterFilm = memo(({ onClickShowFilter }: IFilterFilm) => {
   return (
     <div className="filter__wrapper">
-      <button className={"filter__btn"} onClick={onClickFilterBtn}>
+      <button className={"filter__btn"} onClick={onClickShowFilter}>
         <img className={"filter__img"} src={Filter} alt="filterSVG" />
       </button>
     </div>

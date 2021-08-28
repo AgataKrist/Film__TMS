@@ -5,21 +5,14 @@ interface IButton {
   isActive?: boolean;
   text: string;
   onClickNextFilm?: () => void;
-  onClickFilterByRating?: () => void;
-  onClickFilterByYear?: () => void;
+  onClickShowResult?: () => void;
 }
 
 export const Button = memo(
-  ({
-    isActive,
-    text,
-    onClickNextFilm,
-    onClickFilterByRating,
-    onClickFilterByYear,
-  }: IButton) => (
+  ({ isActive, text, onClickNextFilm, onClickShowResult }: IButton) => (
     <button
       className={isActive ? "btn__filter active" : "btn__filter"}
-      onClick={onClickNextFilm || onClickFilterByRating || onClickFilterByYear}
+      onClick={onClickNextFilm || onClickShowResult}
     >
       {text}
     </button>
