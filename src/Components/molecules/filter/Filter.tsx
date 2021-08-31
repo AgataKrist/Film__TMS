@@ -7,7 +7,7 @@ import { FieldSelect } from "../../atoms/fieldSelect";
 import { FieldSearch } from "../../atoms/fieldSearch";
 import { FieldFromTo } from "../../atoms/fieldFromTo";
 import { FieldGenre } from "../../atoms/fieldGenre";
-import { ISortSettings } from "./../../../types/index";
+import { ISortSettings, ISortSettingsFromTo } from "./../../../types/index";
 import { ButtonSorting } from "../../atoms/buttonSorting";
 
 interface IFilter {
@@ -16,9 +16,21 @@ interface IFilter {
   value: string;
   valueSelectCountry: string;
   sortSettings: ISortSettings[];
+  sortFromToYear: ISortSettingsFromTo;
+  sortFromToRating: ISortSettingsFromTo;
   onClickShowResult: () => void;
   handlerSearchFilter: (text: string) => void;
   onChangeHandlerSelectCountre: (valueCountry: string) => void;
+  onChangeHandlerFromToYear: (
+    value: string,
+    type: string,
+    field: string
+  ) => void;
+  onChangeHandlerFromToRating: (
+    value: string,
+    type: string,
+    field: string
+  ) => void;
   handlerSorting: (field: string) => void;
 }
 
@@ -27,11 +39,15 @@ export const Filter = memo(
     genres,
     countries,
     value,
-    sortSettings,
     valueSelectCountry,
+    sortSettings,
+    sortFromToYear,
+    sortFromToRating,
     onClickShowResult,
     handlerSearchFilter,
     onChangeHandlerSelectCountre,
+    onChangeHandlerFromToYear,
+    onChangeHandlerFromToRating,
     handlerSorting,
   }: IFilter) => {
     return (
@@ -59,8 +75,14 @@ export const Filter = memo(
                 values={countries}
                 valueSelectCountry={valueSelectCountry}
               />
-              <FieldFromTo title={"Years"} />
-              <FieldFromTo title={"Rating"} />
+              <FieldFromTo
+                {...sortFromToYear}
+                onChange={onChangeHandlerFromToYear}
+              />
+              <FieldFromTo
+                {...sortFromToRating}
+                onChange={onChangeHandlerFromToRating}
+              />
               <FieldGenre values={genres} />
             </form>
           </div>

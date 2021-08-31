@@ -9,15 +9,13 @@ import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
 import { Button } from "./Components/atoms/button/Button";
-import { filterBy, sortBy } from "./helper/helper";
 import { FilterFilm } from "./Components/atoms/filterFilmBtn/FilterFilm";
+import { filterBy, getFilterProps, sortBy } from "./helper/helper";
 
 function App() {
   const filterProps = {
-    countries: Array.from(
-      new Set(films.map((film) => film.country.split(", ")).flat())
-    ), //array
-    genres: Array.from(new Set(films.map((film) => film.genre).flat())), //array
+    countries: getFilterProps(films, "country"), //array
+    genres: getFilterProps(films, "genre"), //array
   };
   const selectedFilm = films[1];
   const trailerCurrent = trailer[0];
@@ -27,6 +25,21 @@ function App() {
     { isActive: false, FIELD_NAME: "YEAR", field: "year" },
   ];
 
+  const defaultSortFromToRating = {
+    isActive: false,
+    FIELD_NAME: "Rating",
+    field: "imdbRating",
+    from: "",
+    to: "",
+  };
+  const defaultSortFromToYear = {
+    isActive: false,
+    FIELD_NAME: "Year",
+    field: "year",
+    from: "",
+    to: "",
+  };
+
   const [filterdFilms, setFilterdFilms] = useState(films.slice(0, 1));
   const [inputValueHeader, setInputValueHeader] = useState("");
   const [inputValueFilter, setInputValueFilter] = useState("");
@@ -34,11 +47,16 @@ function App() {
   const [isShowNextFilmBtn, setIsShowNextFilmBtn] = useState(true);
   const [valueSelectCountry, setSelectValueCountry] = useState("");
   const [sortSettings, setSortSettings] = useState(defaultSortSettings);
+  const [sortFromToYear, setSortFromToYear] = useState(defaultSortFromToYear);
+  const [sortFromToRating, setSortFromToRating] = useState(
+    defaultSortFromToRating
+  );
 
   const onClickSearchBtn = () => {
     const filterByTitile = filterBy(films, inputValueHeader, "title");
     setFilterdFilms(filterByTitile);
     setIsShowNextFilmBtn(false);
+    setInputValueHeader("");
   };
   const onChangeHandlerSearchHeader = (text: string) => {
     setInputValueHeader(text);
@@ -59,9 +77,7 @@ function App() {
     }));
 
     setSortSettings(newSettings);
-    const filterByField = [...films].sort(
-      (a: any, b: any) => a[field] - b[field]
-    );
+    const filterByField = sortBy(films, null, field);
     setFilterdFilms(filterByField.slice(0, 1));
     setIsShowFilter(!isShowFilter);
     setIsShowNextFilmBtn(true);
@@ -71,28 +87,93 @@ function App() {
     const field = sortSettings.reduce((acc, { isActive, field }) => {
       return isActive ? field : acc;
     }, "");
-    setFilterdFilms(
-      [...films]
-        .sort((a: any, b: any) => a[field] - b[field])
-        .slice(0, filterdFilms.length + 1)
-    );
+
+    const field2 = sortSettings.find((el) => el.isActive)?.field; //?
+    console.log({ field }, { field2 });
+    //Если использаовать find то требуется дополнительное условие, (когда ни один фильтр не выбран кнопка не отрабатывает) а reduce возвращает пустую строку если не выбраны фильтры и соответственно кнопка show nexr отрабатывает
+    setFilterdFilms(sortBy(films, filterdFilms, field));
   };
 
   const handlerSearchFilter = (text: string) => {
     setInputValueFilter(text);
   };
-  const onClickShowResult = () => {
-    const temporaryByInputSearch = inputValueFilter
-      ? (setFilterdFilms(filterBy(films, inputValueFilter, "title", "plot")),
-        setIsShowNextFilmBtn(false),
-        setInputValueFilter(inputValueFilter))
-      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
-
-    setIsShowFilter(false);
-  };
 
   const onChangeHandlerSelectCountre = (valueCountry: string) => {
     setSelectValueCountry(valueCountry);
+  };
+
+  const onChangeHandlerFromToYear = (
+    value: string,
+    type: string,
+    field: string
+  ) => {
+    console.log(field);
+
+    const newSortFromToYear = {
+      ...sortFromToYear,
+      from: type === "from" ? value : sortFromToYear.from,
+      to: type === "to" ? value : sortFromToYear.to,
+    };
+    setSortFromToYear(newSortFromToYear);
+  };
+  const onChangeHandlerFromToRating = (
+    value: string,
+    type: string,
+    field: string
+  ) => {
+    console.log(field);
+
+    const newSortFromToRating = {
+      ...sortFromToRating,
+      from: type === "from" ? value : sortFromToRating.from,
+      to: type === "to" ? value : sortFromToRating.to,
+    };
+    setSortFromToRating(newSortFromToRating);
+  };
+
+  const onClickShowResult = () => {
+    //!пока делаю все фильтрации не зависимо друг от друга
+
+    //SearhInputFilter
+    /*const temporaryByInputSearch = inputValueFilter
+       ? (setFilterdFilms(filterBy(films, inputValueFilter, "title", "plot")),
+         setIsShowNextFilmBtn(false),
+         setInputValueFilter(inputValueFilter))
+       : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
+
+    //SelectCountyFilter
+    /*
+    const temporaryByCountry = valueSelectCountry
+      ? (setFilterdFilms(filterBy(films, valueSelectCountry, "country")),
+        setIsShowNextFilmBtn(false))
+      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
+      */
+    //FilterByYears
+    /*const temporaryByYearFromTo =
+      sortFromToYear.from && sortFromToYear.to
+        ? (setFilterdFilms(
+            films.filter(
+              (film: any) =>
+                film.year >= parseInt(sortFromToYear.from) &&
+                film.year <= parseInt(sortFromToYear.to)
+            )
+          ),
+          setIsShowNextFilmBtn(false))
+        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
+    //FilterByYears
+    const temporaryByRatingFromTo =
+      sortFromToRating.from && sortFromToRating.to
+        ? (setFilterdFilms(
+            films.filter(
+              (film: any) =>
+                film.imdbRating >= Number(sortFromToRating.from) &&
+                film.imdbRating <= Number(sortFromToRating.to)
+            )
+          ),
+          setIsShowNextFilmBtn(false))
+        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
+
+    setIsShowFilter(false);
   };
 
   return (
@@ -109,10 +190,14 @@ function App() {
           <Filter
             {...filterProps}
             sortSettings={sortSettings}
+            sortFromToYear={sortFromToYear}
+            sortFromToRating={sortFromToRating}
             handlerSorting={handlerSorting}
             onClickShowResult={onClickShowResult}
             handlerSearchFilter={handlerSearchFilter}
             onChangeHandlerSelectCountre={onChangeHandlerSelectCountre}
+            onChangeHandlerFromToYear={onChangeHandlerFromToYear}
+            onChangeHandlerFromToRating={onChangeHandlerFromToRating}
             value={inputValueFilter}
             valueSelectCountry={valueSelectCountry}
           />
