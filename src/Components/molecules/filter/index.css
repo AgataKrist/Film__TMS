@@ -1,0 +1,52 @@
+.filterBOX__wrapper {
+  margin: auto;
+  margin-bottom: 100px;
+  max-width: 800px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+  box-sizing: border-box;
+  border-radius: 13px;
+}
+
+.filterBOX__content {
+  padding: 30px;
+  display: grid;
+}
+
+.btn__group {
+  margin-top: -20px;
+  display: flex;
+}
+
+.sort {
+  margin-bottom: 40px;
+}
+.form__filter {
+  margin-top: -20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.form__filter > label {
+  margin-bottom: 15px;
+}
+.form__filter input {
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+.form__filter select {
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+
+.from > input {
+  margin-right: 40px;
+}
+
+.field__title {
+  margin-bottom: 10px;
+  font: normal normal 18px/1.375 "Alata", sans-serif;
+  color: #979797;
+}

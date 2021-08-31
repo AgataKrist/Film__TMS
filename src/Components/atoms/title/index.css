@@ -1,0 +1,22 @@
+.film__title {
+  font: normal normal 24px/1.375 "Alata", sans-serif;
+  color: #7f7fd5;
+  padding-right: 90px;
+}
+.film__title-wrapper {
+  margin-bottom: 50px;
+}
+.shortFilm__title-wrapper {
+  margin-bottom: 20px;
+}
+.film__title-short {
+  font: normal normal 20px/1.4 "Alata", sans-serif;
+  color: #4f4f4f;
+}
+
+.film__title-link {
+  text-decoration: none;
+}
+.film__title-link :hover {
+  text-decoration: underline;
+}

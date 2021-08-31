@@ -1,0 +1,23 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+li {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 15px;
+}
+
+.description__name {
+  min-width: 120px;
+  font: normal normal 18px/1.375 "Alata", sans-serif;
+  color: #979797;
+}
+.description__name::first-letter {
+  text-transform: uppercase;
+}
+.description__value {
+  font: normal normal 18px/1.375 "Alata", sans-serif;
+  color: #3a236a;
+}

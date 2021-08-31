@@ -1,0 +1,6 @@
+.form__filter > label > input,
+select {
+  display: block;
+  width: 150px;
+  padding: 2px;
+}

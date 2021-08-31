@@ -1,0 +1,12 @@
+.header__wrapper {
+  padding: 20px;
+  margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}

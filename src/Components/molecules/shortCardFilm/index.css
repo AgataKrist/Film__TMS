@@ -1,0 +1,26 @@
+.shortCard__wrapper {
+  padding: 15px;
+  margin-bottom: 20px;
+  max-width: 340px;
+}
+
+.shortCard__content {
+  text-decoration: none;
+  display: inline-block;
+  height: 100%;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+  box-sizing: border-box;
+  border-radius: 13px;
+  padding: 30px;
+}
+
+.shortCard__content:hover {
+  background: #d6d6db;
+}
+
+.film__year {
+  margin-bottom: 20px;
+  font: normal normal 20px/1.375 "Alata", sans-serif;
+  color: #7f7fd5;
+}

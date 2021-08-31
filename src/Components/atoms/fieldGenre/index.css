@@ -1,0 +1,39 @@
+.genres__wrapper {
+  position: relative;
+  display: flex;
+  min-width: 300px;
+  border-radius: 8px;
+  background: #fdfdff;
+  border: 1px solid #ebebeb;
+}
+.label__genre {
+  grid-column: 2/2;
+  grid-row: 3/3;
+  justify-self: flex-start;
+}
+.tags {
+  flex: 1;
+}
+.add {
+  position: absolute;
+  right: 5px;
+  color: #7f7fd5;
+  font: normal normal 16px/1.375 "Alata", sans-serif;
+  background: transparent;
+}
+
+select.select {
+  position: relative;
+  width: 50px;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  appearance: none;
+  z-index: 2;
+}
+
+select.select:active,
+select.select:focus {
+  outline: none;
+}
