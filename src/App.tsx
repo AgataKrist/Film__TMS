@@ -9,15 +9,20 @@ import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
 import { Button } from "./Components/atoms/button/Button";
-import { FilterFilm } from "./Components/atoms/filterFilmBtn/FilterFilm";
-import { filterBy, getFilterProps, sortBy } from "./helper/helper";
+import { useEffect } from "react";
+import {
+  filterBy,
+  filterByGenre,
+  getFilterProps,
+  sortBy,
+} from "./helper/helper";
 
 function App() {
   const filterProps = {
     countries: getFilterProps(films, "country"), //array
     genres: getFilterProps(films, "genre"), //array
   };
-  const selectedFilm = films[1];
+  const selectedFilmDefault = films[1];
   const trailerCurrent = trailer[0];
 
   const defaultSortSettings = [
@@ -51,21 +56,31 @@ function App() {
   const [sortFromToRating, setSortFromToRating] = useState(
     defaultSortFromToRating
   );
+  const [genreList, setGenreList] = useState([] as any);
+  const [selectedFilm, setSelectedFilm] = useState(selectedFilmDefault as any);
 
   const onClickSearchBtn = () => {
-    const filterByTitile = filterBy(films, inputValueHeader, "title");
-    setFilterdFilms(filterByTitile);
     setIsShowNextFilmBtn(false);
     setInputValueHeader("");
   };
-  const onChangeHandlerSearchHeader = (text: string) => {
-    setInputValueHeader(text);
-    if (text.length > 2) {
-      const filterByTitile = filterBy(films, inputValueHeader, "title");
+
+  useEffect(() => {
+    if (inputValueHeader.length > 2) {
+      const filterByTitile = filterBy(
+        films as any,
+        inputValueHeader as any,
+        "title"
+      );
       setFilterdFilms(filterByTitile);
       return;
     }
-    setFilterdFilms(films);
+    if (inputValueHeader.length) {
+      setFilterdFilms(films);
+    }
+  }, [inputValueHeader]);
+
+  const onChangeHandlerSearchHeader = (text: string) => {
+    setInputValueHeader(text);
   };
   const onClickShowFilter = () => {
     setIsShowFilter(!isShowFilter);
@@ -77,20 +92,14 @@ function App() {
     }));
 
     setSortSettings(newSettings);
-    const filterByField = sortBy(films, null, field);
+    const filterByField = sortBy(films as any[], [], field as string);
     setFilterdFilms(filterByField.slice(0, 1));
     setIsShowFilter(!isShowFilter);
     setIsShowNextFilmBtn(true);
   };
 
   const onClickNextFilm = () => {
-    const field = sortSettings.reduce((acc, { isActive, field }) => {
-      return isActive ? field : acc;
-    }, "");
-
-    const field2 = sortSettings.find((el) => el.isActive)?.field; //?
-    console.log({ field }, { field2 });
-    //Если использаовать find то требуется дополнительное условие, (когда ни один фильтр не выбран кнопка не отрабатывает) а reduce возвращает пустую строку если не выбраны фильтры и соответственно кнопка show nexr отрабатывает
+    const field = sortSettings.find((el) => el.isActive)?.field;
     setFilterdFilms(sortBy(films, filterdFilms, field));
   };
 
@@ -111,8 +120,8 @@ function App() {
 
     const newSortFromToYear = {
       ...sortFromToYear,
-      from: type === "from" ? value : sortFromToYear.from,
-      to: type === "to" ? value : sortFromToYear.to,
+      from: type === "from" ? value : sortFromToYear.from, //можно сделать от минимального года до сегодняшней даты
+      to: type === "to" ? value : sortFromToYear.to, //можно сделать от минимального года до сегодняшней даты
     };
     setSortFromToYear(newSortFromToYear);
   };
@@ -125,10 +134,19 @@ function App() {
 
     const newSortFromToRating = {
       ...sortFromToRating,
-      from: type === "from" ? value : sortFromToRating.from,
-      to: type === "to" ? value : sortFromToRating.to,
+      from: type === "from" ? value : sortFromToRating.from, //можно сделать от минимального года до сегодняшней даты
+      to: type === "to" ? value : sortFromToRating.to, //можно сделать от минимального года до сегодняшней даты
     };
     setSortFromToRating(newSortFromToRating);
+  };
+  const onChangeHandlerGenre = (value: string) => {
+    setGenreList([...genreList, value]);
+  };
+  const onClickDeleteGenre = (value: string) => {
+    const index = genreList.indexOf(value);
+    const newList = [...genreList];
+    newList.splice(index, 1);
+    setGenreList(newList);
   };
 
   const onClickShowResult = () => {
@@ -148,6 +166,7 @@ function App() {
         setIsShowNextFilmBtn(false))
       : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
       */
+
     //FilterByYears
     /*const temporaryByYearFromTo =
       sortFromToYear.from && sortFromToYear.to
@@ -160,8 +179,9 @@ function App() {
           ),
           setIsShowNextFilmBtn(false))
         : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
-    //FilterByYears
-    const temporaryByRatingFromTo =
+
+    //FilterByRating
+    /* const temporaryByRatingFromTo =
       sortFromToRating.from && sortFromToRating.to
         ? (setFilterdFilms(
             films.filter(
@@ -171,9 +191,21 @@ function App() {
             )
           ),
           setIsShowNextFilmBtn(false))
-        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
+        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
 
+    //FilterByGenre
+    const temporaryByGenre = genreList.length
+      ? (setFilterdFilms(filterByGenre(films, genreList)),
+        setIsShowNextFilmBtn(false))
+      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
     setIsShowFilter(false);
+  };
+
+  const onClickShortCard = (id: number) => {
+    const newSelectedFilm = films.find(({ id: filmId }) => id === filmId);
+    if (newSelectedFilm) {
+      setSelectedFilm(newSelectedFilm);
+    }
   };
 
   return (
@@ -198,8 +230,11 @@ function App() {
             onChangeHandlerSelectCountre={onChangeHandlerSelectCountre}
             onChangeHandlerFromToYear={onChangeHandlerFromToYear}
             onChangeHandlerFromToRating={onChangeHandlerFromToRating}
+            onChangeHandlerGenre={onChangeHandlerGenre}
+            onClickDeleteGenre={onClickDeleteGenre}
             value={inputValueFilter}
             valueSelectCountry={valueSelectCountry}
+            genreList={genreList}
           />
         ) : null}
         <div className="allFilms__wrapper">
@@ -214,13 +249,19 @@ function App() {
           </div>
           <div className="allFilms">
             {filterdFilms.map((film) => {
-              return <ShortCardFilm key={film.id} {...film} />;
+              return (
+                <ShortCardFilm
+                  onClickShortCard={onClickShortCard}
+                  key={film.id}
+                  {...film}
+                />
+              );
             })}
           </div>
         </div>
-        {/* <CardFilm film={selectedFilm} />
+        <CardFilm film={selectedFilm} />
         <StarRating />
-        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} /> */}
+        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
       </div>
     </div>
   );

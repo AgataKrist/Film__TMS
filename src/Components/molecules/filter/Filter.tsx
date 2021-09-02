@@ -18,8 +18,11 @@ interface IFilter {
   sortSettings: ISortSettings[];
   sortFromToYear: ISortSettingsFromTo;
   sortFromToRating: ISortSettingsFromTo;
+  genreList: string[] | [];
   onClickShowResult: () => void;
   handlerSearchFilter: (text: string) => void;
+  onChangeHandlerGenre: (value: string) => void;
+  onClickDeleteGenre: (value: string) => void;
   onChangeHandlerSelectCountre: (valueCountry: string) => void;
   onChangeHandlerFromToYear: (
     value: string,
@@ -43,9 +46,12 @@ export const Filter = memo(
     sortSettings,
     sortFromToYear,
     sortFromToRating,
+    genreList,
     onClickShowResult,
     handlerSearchFilter,
     onChangeHandlerSelectCountre,
+    onChangeHandlerGenre,
+    onClickDeleteGenre,
     onChangeHandlerFromToYear,
     onChangeHandlerFromToRating,
     handlerSorting,
@@ -83,7 +89,12 @@ export const Filter = memo(
                 {...sortFromToRating}
                 onChange={onChangeHandlerFromToRating}
               />
-              <FieldGenre values={genres} />
+              <FieldGenre
+                values={genres}
+                genreList={genreList}
+                onChange={onChangeHandlerGenre}
+                onClick={onClickDeleteGenre}
+              />
             </form>
           </div>
           <Button

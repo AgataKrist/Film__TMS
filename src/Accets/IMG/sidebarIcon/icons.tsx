@@ -153,7 +153,7 @@ export const Icon7 = ({ style }: IICon) => {
         rx="14.75"
         fill="#FDFDFF"
         stroke="#4F4F4F"
-        stroke-width="0.5"
+        strokeWidth="0.5"
       />
       <rect x="8" y="5" width="20" height="20" rx="10" fill="#7F7FD5" />
     </svg>

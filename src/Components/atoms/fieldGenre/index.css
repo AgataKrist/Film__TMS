@@ -1,6 +1,7 @@
 .genres__wrapper {
   position: relative;
   display: flex;
+  align-items: center;
   min-width: 300px;
   border-radius: 8px;
   background: #fdfdff;
@@ -36,4 +37,20 @@ select.select {
 select.select:active,
 select.select:focus {
   outline: none;
+}
+
+.tags__item {
+  border-radius: 5px;
+  padding: 0 3px;
+  color: #fff;
+  background-color: #7f7fd5;
+  display: inline-block;
+  margin-right: 10px;
+}
+.tag__close {
+  cursor: pointer;
+  margin-left: 10px;
+}
+.tag__close:hover {
+  color: aqua;
 }
