@@ -1,0 +1,56 @@
+.swith__wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.switch__text {
+  font: normal normal 30px/1.4 "Alata", sans-serif;
+  color: #4f4f4f;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 40px;
+  /* background-color: red; */
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  border: 1px solid #7f7fd5;
+  border-radius: 15px;
+
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  background-color: #fff;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #7f7fd5;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider::before {
+  transform: translateX(40px);
+  background-color: #fff;
+}
+input:checked + .slider {
+  background-color: #7f7fd5;
+}

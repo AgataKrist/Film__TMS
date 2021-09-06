@@ -5,7 +5,7 @@ interface IButton {
   isActive?: boolean;
   text: string;
   onClickNextFilm?: () => void;
-  onClickShowResult?: () => void;
+onClickShowResult?: () => void;
 }
 
 export const Button = memo(

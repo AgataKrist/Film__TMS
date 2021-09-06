@@ -7,6 +7,7 @@ import { AboutFilm } from "../../atoms/aboutFilm";
 import { Rating } from "../../atoms/rating";
 import { Description } from "../../atoms/descriptionFilm";
 import { IFilm } from "./../../../types/index";
+import { StarRating } from "../starRating";
 
 interface ICardFilm {
   film: IFilm;
@@ -30,6 +31,7 @@ export const CardFilm = memo(({ film }: ICardFilm) => {
           <AboutFilm text={film.plot} isShort={false} />
         </div>
       </div>
+      <StarRating />
     </div>
   );
 });

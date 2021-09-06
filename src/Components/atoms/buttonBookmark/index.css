@@ -1,0 +1,21 @@
+.btn__bookMark {
+  width: 310px;
+  padding: 15px 25px;
+  font: normal normal 12px/1.375 "Alata", sans-serif;
+  background: #ebebeb;
+  border-radius: 5px;
+  color: #979797;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.btn__bookMark:hover {
+  background: #c0bfbf;
+}
+.active {
+  background: #7f7fd5;
+  color: #fff;
+}
+.active:hover {
+  background: #6060b6;
+}

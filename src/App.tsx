@@ -16,6 +16,8 @@ import {
   getFilterProps,
   sortBy,
 } from "./helper/helper";
+import { ButtonBookMark } from "./Components/atoms/buttonBookmark";
+import { Switch } from "./Components/atoms/switch";
 
 function App() {
   const filterProps = {
@@ -56,8 +58,10 @@ function App() {
   const [sortFromToRating, setSortFromToRating] = useState(
     defaultSortFromToRating
   );
-  const [genreList, setGenreList] = useState([] as any);
-  const [selectedFilm, setSelectedFilm] = useState(selectedFilmDefault as any);
+  const [genreList, setGenreList] = useState<any>([]);
+  const [selectedFilm, setSelectedFilm] = useState<any>(null);
+  const [bookmarksId, setBookmarksId] = useState<number[]>([]);
+  const [viewedId, setViewedId] = useState<number[]>([]);
 
   const onClickSearchBtn = () => {
     setIsShowNextFilmBtn(false);
@@ -202,11 +206,59 @@ function App() {
   };
 
   const onClickShortCard = (id: number) => {
+    console.log(selectedFilm);
+
     const newSelectedFilm = films.find(({ id: filmId }) => id === filmId);
     if (newSelectedFilm) {
       setSelectedFilm(newSelectedFilm);
     }
   };
+  const addBookmark = (id: number) => {
+    const newBookmarksId = [...bookmarksId, id];
+    const hasId = bookmarksId.find((currentId) => currentId === id);
+    if (hasId) {
+      return;
+    }
+    setBookmarksId(newBookmarksId);
+    localStorage.setItem("bookmarks", JSON.stringify(newBookmarksId));
+  };
+  const removeBookmark = (id: number) => {
+    const filterBookmarksId = bookmarksId.filter(
+      (currentId) => currentId !== id
+    );
+    setBookmarksId(filterBookmarksId);
+    localStorage.setItem("bookmarks", JSON.stringify(filterBookmarksId));
+  };
+
+  // const [viewedId, setViewedId] = useState<number[]>([]);
+
+  const onChangedViewed = (id: number, checked: boolean) => {
+    console.log({ id }, { checked });
+    let newViewedId = [] as number[];
+    if (!checked) {
+      newViewedId = [...viewedId, id];
+      setViewedId(newViewedId);
+    }
+    if (checked) {
+      newViewedId = viewedId.filter((currentId) => currentId !== id);
+      setViewedId(newViewedId);
+    }
+
+    localStorage.setItem("viewedId", JSON.stringify(newViewedId));
+  };
+
+  useEffect(() => {
+    const savedBookmarks = localStorage.getItem("bookmarks");
+    if (savedBookmarks) {
+      setBookmarksId(JSON.parse(savedBookmarks));
+    }
+    const savedViewedId = localStorage.getItem("viewedId");
+    if (savedViewedId) {
+      setViewedId(JSON.parse(savedViewedId));
+    }
+
+    return () => {};
+  }, []);
 
   return (
     <div className="App">
@@ -248,20 +300,60 @@ function App() {
             )}
           </div>
           <div className="allFilms">
-            {filterdFilms.map((film) => {
+            {filterdFilms.map((film: any) => {
               return (
-                <ShortCardFilm
-                  onClickShortCard={onClickShortCard}
-                  key={film.id}
-                  {...film}
-                />
+                <div key={film.id} className="shortCardAndButtons">
+                  <ShortCardFilm
+                    onClickShortCard={onClickShortCard}
+                    {...film}
+                  />
+                  <div className="btns__group">
+                    {!bookmarksId.find((id) => id === film.id) ? (
+                      <ButtonBookMark
+                        isActive={true}
+                        text={"Add"}
+                        id={film.id}
+                        onClick={addBookmark}
+                      />
+                    ) : (
+                      <ButtonBookMark
+                        isActive={false}
+                        text={"Remove"}
+                        id={film.id}
+                        onClick={removeBookmark}
+                      />
+                    )}
+
+                    <Switch
+                      checked={
+                        viewedId.includes(film.id as number) ? true : false
+                      }
+                      text={"Просмотрено"}
+                      onChange={onChangedViewed}
+                      id={film.id}
+                    />
+                  </div>
+                </div>
               );
             })}
           </div>
         </div>
-        <CardFilm film={selectedFilm} />
-        <StarRating />
-        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} />
+        {selectedFilm ? (
+          <CardFilm film={selectedFilm} />
+        ) : (
+          <p
+            style={{
+              fontSize: "50px",
+              textAlign: "center",
+              marginBottom: "50px",
+            }}
+          >
+            film not selected
+          </p>
+        )}
+
+        {/* <StarRating /> */}
+        {/* <TrailerFilm title={selectedFilm.title} {...trailerCurrent} /> */}
       </div>
     </div>
   );
