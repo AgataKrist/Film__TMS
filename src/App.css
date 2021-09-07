@@ -97,9 +97,23 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 .allFilms {
   display: flex;
+  /* flex-direction: column; */
   flex-wrap: wrap;
   justify-content: center;
 }
 .main {
   padding-left: 100px;
+}
+.shortCardAndButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btns__group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

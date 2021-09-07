@@ -28,3 +28,10 @@ export interface ISortSettings {
   FIELD_NAME: string;
   field: string;
 }
+export interface ISortSettingsFromTo {
+  isActive: boolean;
+  FIELD_NAME: string;
+  field: string;
+  from: string | null;
+  to: string | null;
+}

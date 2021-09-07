@@ -8,12 +8,17 @@ interface IShortCardFilm {
   title: string;
   plot: string;
   year: number;
+  id: number;
+  onClickShortCard: (id: number) => void;
 }
 
 export const ShortCardFilm = memo(
-  ({ poster, title, plot, year }: IShortCardFilm) => {
+  ({ poster, title, plot, year, id, onClickShortCard }: IShortCardFilm) => {
     return (
-      <div className={"shortCard__wrapper"}>
+      <div
+        onClick={() => onClickShortCard(id)}
+        className={"shortCard__wrapper"}
+      >
         <a href="#" className={"shortCard__content"}>
           <Poster poster={poster} />
           <Title title={title} isShort={true} />

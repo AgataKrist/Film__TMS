@@ -4,28 +4,47 @@ import { Filter } from "./Components/molecules/filter";
 import { Header } from "./Components/molecules/header";
 import { ShortCardFilm } from "./Components/molecules/shortCardFilm";
 import { Sidebar } from "./Components/molecules/sidebar";
-import { StarRating } from "./Components/molecules/starRating";
-import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
 import { Button } from "./Components/atoms/button/Button";
-import { filterBy, sortBy } from "./helper/helper";
-import { FilterFilm } from "./Components/atoms/filterFilmBtn/FilterFilm";
+import { useEffect } from "react";
+import {
+  filterBy,
+  filterByGenre,
+  getFilterProps,
+  sortBy,
+} from "./helper/helper";
+import { ButtonBookMark } from "./Components/atoms/buttonBookmark";
+import { Switch } from "./Components/atoms/switch";
+import { IFilm } from "./types/index";
 
 function App() {
   const filterProps = {
-    countries: Array.from(
-      new Set(films.map((film) => film.country.split(", ")).flat())
-    ), //array
-    genres: Array.from(new Set(films.map((film) => film.genre).flat())), //array
+    countries: getFilterProps(films, "country"), //array
+    genres: getFilterProps(films, "genre"), //array
   };
-  const selectedFilm = films[1];
+  const selectedFilmDefault = films[1];
   const trailerCurrent = trailer[0];
 
   const defaultSortSettings = [
     { isActive: false, FIELD_NAME: "RATING", field: "imdbRating" },
     { isActive: false, FIELD_NAME: "YEAR", field: "year" },
   ];
+
+  const defaultSortFromToRating = {
+    isActive: false,
+    FIELD_NAME: "Rating",
+    field: "imdbRating",
+    from: "",
+    to: "",
+  };
+  const defaultSortFromToYear = {
+    isActive: false,
+    FIELD_NAME: "Year",
+    field: "year",
+    from: "",
+    to: "",
+  };
 
   const [filterdFilms, setFilterdFilms] = useState(films.slice(0, 1));
   const [inputValueHeader, setInputValueHeader] = useState("");
@@ -34,20 +53,37 @@ function App() {
   const [isShowNextFilmBtn, setIsShowNextFilmBtn] = useState(true);
   const [valueSelectCountry, setSelectValueCountry] = useState("");
   const [sortSettings, setSortSettings] = useState(defaultSortSettings);
+  const [sortFromToYear, setSortFromToYear] = useState(defaultSortFromToYear);
+  const [sortFromToRating, setSortFromToRating] = useState(
+    defaultSortFromToRating
+  );
+  const [genreList, setGenreList] = useState<any>([]);
+  const [selectedFilm, setSelectedFilm] = useState<any>(null);
+  const [bookmarksId, setBookmarksId] = useState<number[]>([]);
+  const [viewedId, setViewedId] = useState<number[]>([]);
 
   const onClickSearchBtn = () => {
-    const filterByTitile = filterBy(films, inputValueHeader, "title");
-    setFilterdFilms(filterByTitile);
     setIsShowNextFilmBtn(false);
+    setInputValueHeader("");
   };
-  const onChangeHandlerSearchHeader = (text: string) => {
-    setInputValueHeader(text);
-    if (text.length > 2) {
-      const filterByTitile = filterBy(films, inputValueHeader, "title");
+
+  useEffect(() => {
+    if (inputValueHeader.length > 2) {
+      const filterByTitile = filterBy(
+        films as any,
+        inputValueHeader as any,
+        "title"
+      );
       setFilterdFilms(filterByTitile);
       return;
     }
-    setFilterdFilms(films);
+    if (inputValueHeader.length) {
+      setFilterdFilms(films);
+    }
+  }, [inputValueHeader]);
+
+  const onChangeHandlerSearchHeader = (text: string) => {
+    setInputValueHeader(text);
   };
   const onClickShowFilter = () => {
     setIsShowFilter(!isShowFilter);
@@ -59,41 +95,162 @@ function App() {
     }));
 
     setSortSettings(newSettings);
-    const filterByField = [...films].sort(
-      (a: any, b: any) => a[field] - b[field]
-    );
+    const filterByField = sortBy(films as any[], [], field as string);
     setFilterdFilms(filterByField.slice(0, 1));
     setIsShowFilter(!isShowFilter);
     setIsShowNextFilmBtn(true);
   };
 
   const onClickNextFilm = () => {
-    const field = sortSettings.reduce((acc, { isActive, field }) => {
-      return isActive ? field : acc;
-    }, "");
-    setFilterdFilms(
-      [...films]
-        .sort((a: any, b: any) => a[field] - b[field])
-        .slice(0, filterdFilms.length + 1)
-    );
+    const field = sortSettings.find((el) => el.isActive)?.field;
+    setFilterdFilms(sortBy(films, filterdFilms, field));
   };
 
   const handlerSearchFilter = (text: string) => {
     setInputValueFilter(text);
   };
-  const onClickShowResult = () => {
-    const temporaryByInputSearch = inputValueFilter
-      ? (setFilterdFilms(filterBy(films, inputValueFilter, "title", "plot")),
-        setIsShowNextFilmBtn(false),
-        setInputValueFilter(inputValueFilter))
-      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
-
-    setIsShowFilter(false);
-  };
 
   const onChangeHandlerSelectCountre = (valueCountry: string) => {
     setSelectValueCountry(valueCountry);
   };
+
+  const onChangeHandlerFromToYear = (
+    value: string,
+    type: string,
+    field: string
+  ) => {
+    console.log(field);
+
+    const newSortFromToYear = {
+      ...sortFromToYear,
+      from: type === "from" ? value : sortFromToYear.from, //можно сделать от минимального года до сегодняшней даты
+      to: type === "to" ? value : sortFromToYear.to, //можно сделать от минимального года до сегодняшней даты
+    };
+    setSortFromToYear(newSortFromToYear);
+  };
+  const onChangeHandlerFromToRating = (
+    value: string,
+    type: string,
+    field: string
+  ) => {
+    console.log(field);
+
+    const newSortFromToRating = {
+      ...sortFromToRating,
+      from: type === "from" ? value : sortFromToRating.from, //можно сделать от минимального года до сегодняшней даты
+      to: type === "to" ? value : sortFromToRating.to, //можно сделать от минимального года до сегодняшней даты
+    };
+    setSortFromToRating(newSortFromToRating);
+  };
+  const onChangeHandlerGenre = (value: string) => {
+    setGenreList([...genreList, value]);
+  };
+  const onClickDeleteGenre = (value: string) => {
+    const index = genreList.indexOf(value);
+    const newList = [...genreList];
+    newList.splice(index, 1);
+    setGenreList(newList);
+  };
+
+  const onClickShowResult = () => {
+    //!пока делаю все фильтрации не зависимо друг от друга
+
+    //SearhInputFilter
+    /*const temporaryByInputSearch = inputValueFilter
+       ? (setFilterdFilms(filterBy(films, inputValueFilter, "title", "plot")),
+         setIsShowNextFilmBtn(false),
+         setInputValueFilter(inputValueFilter))
+       : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
+
+    //SelectCountyFilter
+    /*
+    const temporaryByCountry = valueSelectCountry
+      ? (setFilterdFilms(filterBy(films, valueSelectCountry, "country")),
+        setIsShowNextFilmBtn(false))
+      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
+      */
+
+    //FilterByYears
+    /*const temporaryByYearFromTo =
+      sortFromToYear.from && sortFromToYear.to
+        ? (setFilterdFilms(
+            films.filter(
+              (film: any) =>
+                film.year >= parseInt(sortFromToYear.from) &&
+                film.year <= parseInt(sortFromToYear.to)
+            )
+          ),
+          setIsShowNextFilmBtn(false))
+        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
+
+    //FilterByRating
+    /* const temporaryByRatingFromTo =
+      sortFromToRating.from && sortFromToRating.to
+        ? (setFilterdFilms(
+            films.filter(
+              (film: any) =>
+                film.imdbRating >= Number(sortFromToRating.from) &&
+                film.imdbRating <= Number(sortFromToRating.to)
+            )
+          ),
+          setIsShowNextFilmBtn(false))
+        : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));*/
+
+    //FilterByGenre
+    const temporaryByGenre = genreList.length
+      ? (setFilterdFilms(filterByGenre(films, genreList)),
+        setIsShowNextFilmBtn(false))
+      : (setFilterdFilms(films.slice(0, 1)), setIsShowNextFilmBtn(true));
+    setIsShowFilter(false);
+  };
+
+  const onClickShortCard = (id: number) => {
+    console.log(selectedFilm);
+
+    const newSelectedFilm = films.find(({ id: filmId }) => id === filmId);
+    if (newSelectedFilm) {
+      setSelectedFilm(newSelectedFilm);
+    }
+  };
+  const addBookmark = (id: number) => {
+    const newBookmarksId = [...bookmarksId, id];
+    const hasId = bookmarksId.find((currentId) => currentId === id);
+    if (hasId) {
+      return;
+    }
+    setBookmarksId(newBookmarksId);
+    localStorage.setItem("bookmarks", JSON.stringify(newBookmarksId));
+  };
+  const removeBookmark = (id: number) => {
+    const filterBookmarksId = bookmarksId.filter(
+      (currentId) => currentId !== id
+    );
+    setBookmarksId(filterBookmarksId);
+    localStorage.setItem("bookmarks", JSON.stringify(filterBookmarksId));
+  };
+
+  const onChangedViewed = (id: number, checked: boolean) => {
+    const newViewedId = checked
+      ? viewedId.filter((currentId) => currentId !== id)
+      : [...viewedId, id];
+
+    setViewedId(newViewedId);
+
+    localStorage.setItem("viewedId", JSON.stringify(newViewedId));
+  };
+
+  useEffect(() => {
+    const savedBookmarks = localStorage.getItem("bookmarks");
+    if (savedBookmarks) {
+      setBookmarksId(JSON.parse(savedBookmarks));
+    }
+    const savedViewedId = localStorage.getItem("viewedId");
+    if (savedViewedId) {
+      setViewedId(JSON.parse(savedViewedId));
+    }
+
+    return () => {};
+  }, []);
 
   return (
     <div className="App">
@@ -109,12 +266,19 @@ function App() {
           <Filter
             {...filterProps}
             sortSettings={sortSettings}
+            sortFromToYear={sortFromToYear}
+            sortFromToRating={sortFromToRating}
             handlerSorting={handlerSorting}
             onClickShowResult={onClickShowResult}
             handlerSearchFilter={handlerSearchFilter}
             onChangeHandlerSelectCountre={onChangeHandlerSelectCountre}
+            onChangeHandlerFromToYear={onChangeHandlerFromToYear}
+            onChangeHandlerFromToRating={onChangeHandlerFromToRating}
+            onChangeHandlerGenre={onChangeHandlerGenre}
+            onClickDeleteGenre={onClickDeleteGenre}
             value={inputValueFilter}
             valueSelectCountry={valueSelectCountry}
+            genreList={genreList}
           />
         ) : null}
         <div className="allFilms__wrapper">
@@ -128,14 +292,58 @@ function App() {
             )}
           </div>
           <div className="allFilms">
-            {filterdFilms.map((film) => {
-              return <ShortCardFilm key={film.id} {...film} />;
+            {filterdFilms.map((film: IFilm) => {
+              return (
+                <div key={film.id} className="shortCardAndButtons">
+                  <ShortCardFilm
+                    onClickShortCard={onClickShortCard}
+                    {...film}
+                  />
+                  <div className="btns__group">
+                    {!bookmarksId.find((id) => id === film.id) ? (
+                      <ButtonBookMark
+                        isActive={true}
+                        text={"Add"}
+                        id={film.id}
+                        onClick={addBookmark}
+                      />
+                    ) : (
+                      <ButtonBookMark
+                        isActive={false}
+                        text={"Remove"}
+                        id={film.id}
+                        onClick={removeBookmark}
+                      />
+                    )}
+
+                    <Switch
+                      checked={Boolean(viewedId.includes(film.id as number))}
+                      text={"Просмотрено"}
+                      onChange={onChangedViewed}
+                      id={film.id}
+                    />
+                  </div>
+                </div>
+              );
             })}
           </div>
         </div>
-        {/* <CardFilm film={selectedFilm} />
-        <StarRating />
-        <TrailerFilm title={selectedFilm.title} {...trailerCurrent} /> */}
+        {selectedFilm ? (
+          <CardFilm film={selectedFilm} />
+        ) : (
+          <p
+            style={{
+              fontSize: "50px",
+              textAlign: "center",
+              marginBottom: "50px",
+            }}
+          >
+            film not selected
+          </p>
+        )}
+
+        {/* <StarRating /> */}
+        {/* <TrailerFilm title={selectedFilm.title} {...trailerCurrent} /> */}
       </div>
     </div>
   );
