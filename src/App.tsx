@@ -4,8 +4,6 @@ import { Filter } from "./Components/molecules/filter";
 import { Header } from "./Components/molecules/header";
 import { ShortCardFilm } from "./Components/molecules/shortCardFilm";
 import { Sidebar } from "./Components/molecules/sidebar";
-import { StarRating } from "./Components/molecules/starRating";
-import { TrailerFilm } from "./Components/molecules/trailerFilm";
 import { films, trailer } from "./mock";
 import { useState } from "react";
 import { Button } from "./Components/atoms/button/Button";
@@ -18,6 +16,7 @@ import {
 } from "./helper/helper";
 import { ButtonBookMark } from "./Components/atoms/buttonBookmark";
 import { Switch } from "./Components/atoms/switch";
+import { IFilm } from "./types/index";
 
 function App() {
   const filterProps = {
@@ -230,19 +229,12 @@ function App() {
     localStorage.setItem("bookmarks", JSON.stringify(filterBookmarksId));
   };
 
-  // const [viewedId, setViewedId] = useState<number[]>([]);
-
   const onChangedViewed = (id: number, checked: boolean) => {
-    console.log({ id }, { checked });
-    let newViewedId = [] as number[];
-    if (!checked) {
-      newViewedId = [...viewedId, id];
-      setViewedId(newViewedId);
-    }
-    if (checked) {
-      newViewedId = viewedId.filter((currentId) => currentId !== id);
-      setViewedId(newViewedId);
-    }
+    const newViewedId = checked
+      ? viewedId.filter((currentId) => currentId !== id)
+      : [...viewedId, id];
+
+    setViewedId(newViewedId);
 
     localStorage.setItem("viewedId", JSON.stringify(newViewedId));
   };
@@ -300,7 +292,7 @@ function App() {
             )}
           </div>
           <div className="allFilms">
-            {filterdFilms.map((film: any) => {
+            {filterdFilms.map((film: IFilm) => {
               return (
                 <div key={film.id} className="shortCardAndButtons">
                   <ShortCardFilm
@@ -325,9 +317,7 @@ function App() {
                     )}
 
                     <Switch
-                      checked={
-                        viewedId.includes(film.id as number) ? true : false
-                      }
+                      checked={Boolean(viewedId.includes(film.id as number))}
                       text={"Просмотрено"}
                       onChange={onChangedViewed}
                       id={film.id}

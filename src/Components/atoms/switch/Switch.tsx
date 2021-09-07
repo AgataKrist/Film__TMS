@@ -3,7 +3,7 @@ import "./index.css";
 
 interface ISwitch {
   checked: boolean;
-  text: string;
+  text?: string;
   onChange: (id: number, checked: boolean) => void;
   id: number;
 }

@@ -17,9 +17,13 @@ export const FieldGenre = memo(
           <div className="tags">
             {genreList.map((genre) => {
               return (
-                <div className={"tags__item"}>
+                <div key={genre} className={"tags__item"}>
                   {genre}
-                  <span onClick={() => onClick(genre)} className={"tag__close"}>
+                  <span
+                    key={genre + "key"}
+                    onClick={() => onClick(genre)}
+                    className={"tag__close"}
+                  >
                     X
                   </span>
                 </div>
@@ -35,7 +39,7 @@ export const FieldGenre = memo(
             <option></option>
             {values.map((value, i) => {
               return (
-                <option key={i} value={`${value}`}>
+                <option key={value} value={`${value}`}>
                   {value}
                 </option>
               );
