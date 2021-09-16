@@ -3,6 +3,8 @@ import { Title } from "../../atoms/title";
 import "./index.css";
 import { Poster } from "../../atoms/poster";
 import { AboutFilm } from "../../atoms/aboutFilm";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
 interface IShortCardFilm {
   poster: string;
   title: string;
@@ -19,12 +21,12 @@ export const ShortCardFilm = memo(
         onClick={() => onClickShortCard(id)}
         className={"shortCard__wrapper"}
       >
-        <a href="#" className={"shortCard__content"}>
+        <Link to={`/films/${id}`} className={"shortCard__content"}>
           <Poster poster={poster} />
           <Title title={title} isShort={true} />
           <div className="film__year">{year}</div>
           <AboutFilm text={plot} isShort={true} />
-        </a>
+        </Link>
       </div>
     );
   }
